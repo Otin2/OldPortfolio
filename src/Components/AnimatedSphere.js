@@ -42,6 +42,7 @@ const vertexShader = `
     attribute vec3 color;
     varying vec3 vColor;
     uniform float uSize;
+    uniform float uPixelRatio;
     uniform float uRotationY;
     uniform vec2 uMouse;
     uniform float uAspect;
@@ -88,7 +89,7 @@ const vertexShader = `
         pos.y += dir.y * force;
         }
         gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);
-        gl_PointSize = uSize;
+        gl_PointSize = uSize * uPixelRatio;
     }
 `;
 
@@ -152,7 +153,7 @@ function useMouseUniform(canvasRef) {
     return { mouse, active };
 }
 
-function ParticleSystem({ count = 1250, particleSize = 12.5, canvasRef }) {
+function ParticleSystem({ count = 1250, particleSize = 6.25, canvasRef }) {
     const meshRef = useRef();
     const [rot, setRot] = useState(0);
     const [, setExpansion] = useState(0);
@@ -195,6 +196,7 @@ function ParticleSystem({ count = 1250, particleSize = 12.5, canvasRef }) {
         const m = new THREE.ShaderMaterial({
         uniforms: {
             uSize: { value: particleSize },
+            uPixelRatio: { value: Math.min(window.devicePixelRatio || 1, 2) },
             uMouse: { value: new THREE.Vector2(0, 0) },
             uAspect: { value: 1 }, // cuadrado
             uRotationY: { value: 0 },
