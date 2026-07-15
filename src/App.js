@@ -45,7 +45,7 @@ function App() {
   return (
     <ThemeProvider>
       <LanguageProvider>
-        <Router basename="/Portfolio">
+        <Router basename={process.env.PUBLIC_URL}>
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/cv" element={<CV />} />
